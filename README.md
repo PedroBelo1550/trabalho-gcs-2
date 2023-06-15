@@ -1,8 +1,12 @@
 # Trabalho final de gerência e configuração de software. 
 
+# WeBudget
+
+O projeto é uma solução para o auxílio no controle, organização e planejamento financeiro, em que auxilia os usuários no controle de metas, despesas, receitas e investimento.
 
 
-Divisão de tarefas
+
+## Divisão de tarefas
 
 * Pedro Belo
   * CI/CD 
