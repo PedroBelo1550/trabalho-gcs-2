@@ -2,9 +2,9 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using WeBudgetWebAPI.Data;
 
 #nullable disable
@@ -12,7 +12,7 @@ using WeBudgetWebAPI.Data;
 namespace WeBudgetWebAPI.Migrations
 {
     [DbContext(typeof(IdentityDataContext))]
-    [Migration("20221109000109_innitialMigration")]
+    [Migration("20221120203057_innitialMigration")]
     partial class innitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -20,32 +20,33 @@ namespace WeBudgetWebAPI.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "6.0.9")
-                .HasAnnotation("Relational:MaxIdentifierLength", 63);
+                .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
-            NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
+            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
                         .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<string>("NormalizedName")
                         .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
+                        .HasColumnType("nvarchar(256)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("NormalizedName")
                         .IsUnique()
-                        .HasDatabaseName("RoleNameIndex");
+                        .HasDatabaseName("RoleNameIndex")
+                        .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles", (string)null);
                 });
@@ -54,19 +55,19 @@ namespace WeBudgetWebAPI.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("ClaimType")
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ClaimValue")
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("RoleId")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
@@ -75,87 +76,23 @@ namespace WeBudgetWebAPI.Migrations
                     b.ToTable("AspNetRoleClaims", (string)null);
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUser", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("text");
-
-                    b.Property<int>("AccessFailedCount")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Email")
-                        .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
-
-                    b.Property<bool>("EmailConfirmed")
-                        .HasColumnType("boolean");
-
-                    b.Property<bool>("LockoutEnabled")
-                        .HasColumnType("boolean");
-
-                    b.Property<DateTimeOffset?>("LockoutEnd")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("NormalizedEmail")
-                        .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
-
-                    b.Property<string>("NormalizedUserName")
-                        .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
-
-                    b.Property<string>("PasswordHash")
-                        .HasColumnType("text");
-
-                    b.Property<string>("PhoneNumber")
-                        .HasColumnType("text");
-
-                    b.Property<bool>("PhoneNumberConfirmed")
-                        .HasColumnType("boolean");
-
-                    b.Property<string>("SecurityStamp")
-                        .HasColumnType("text");
-
-                    b.Property<bool>("TwoFactorEnabled")
-                        .HasColumnType("boolean");
-
-                    b.Property<string>("UserName")
-                        .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("NormalizedEmail")
-                        .HasDatabaseName("EmailIndex");
-
-                    b.HasIndex("NormalizedUserName")
-                        .IsUnique()
-                        .HasDatabaseName("UserNameIndex");
-
-                    b.ToTable("AspNetUsers", (string)null);
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("ClaimType")
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ClaimValue")
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserId")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
@@ -168,18 +105,18 @@ namespace WeBudgetWebAPI.Migrations
                 {
                     b.Property<string>("LoginProvider")
                         .HasMaxLength(128)
-                        .HasColumnType("character varying(128)");
+                        .HasColumnType("nvarchar(128)");
 
                     b.Property<string>("ProviderKey")
                         .HasMaxLength(128)
-                        .HasColumnType("character varying(128)");
+                        .HasColumnType("nvarchar(128)");
 
                     b.Property<string>("ProviderDisplayName")
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserId")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("LoginProvider", "ProviderKey");
 
@@ -191,10 +128,10 @@ namespace WeBudgetWebAPI.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
                 {
                     b.Property<string>("UserId")
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("RoleId")
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("UserId", "RoleId");
 
@@ -206,55 +143,159 @@ namespace WeBudgetWebAPI.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
                     b.Property<string>("UserId")
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("LoginProvider")
                         .HasMaxLength(128)
-                        .HasColumnType("character varying(128)");
+                        .HasColumnType("nvarchar(128)");
 
                     b.Property<string>("Name")
                         .HasMaxLength(128)
-                        .HasColumnType("character varying(128)");
+                        .HasColumnType("nvarchar(128)");
 
                     b.Property<string>("Value")
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("WeBudgetWebAPI.Models.Budget", b =>
+            modelBuilder.Entity("WeBudgetWebAPI.Models.Entities.Account", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
+                        .HasColumnType("int")
                         .HasColumnName("Id");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<bool>("Active")
-                        .HasColumnType("boolean")
-                        .HasColumnName("Active");
+                    b.Property<double>("AccountBalance")
+                        .HasColumnType("float")
+                        .HasColumnName("AccountBalance");
 
-                    b.Property<DateTime>("BudgetDate")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("BudgetDate");
-
-                    b.Property<double>("BudgetValue")
-                        .HasColumnType("double precision")
-                        .HasColumnName("BudgetValue");
-
-                    b.Property<double>("BudgetValueUsed")
-                        .HasColumnType("double precision")
-                        .HasColumnName("BudgetValueUsed");
-
-                    b.Property<int>("CategoryId")
-                        .HasColumnType("integer");
+                    b.Property<DateTime>("AccountDateTime")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("AccountDateTime");
 
                     b.Property<string>("UserId")
                         .IsRequired()
-                        .HasColumnType("text")
+                        .HasColumnType("nvarchar(450)")
+                        .HasColumnOrder(1);
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Account");
+                });
+
+            modelBuilder.Entity("WeBudgetWebAPI.Models.Entities.ApplicationUser", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("AccessFailedCount")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Email")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<bool>("EmailConfirmed")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("FirstName");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("LastName");
+
+                    b.Property<bool>("LockoutEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTimeOffset?>("LockoutEnd")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("NormalizedEmail")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("NormalizedUserName")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("PasswordHash")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("PhoneNumberConfirmed")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("SecurityStamp")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("TwoFactorEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("UserName")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NormalizedEmail")
+                        .HasDatabaseName("EmailIndex");
+
+                    b.HasIndex("NormalizedUserName")
+                        .IsUnique()
+                        .HasDatabaseName("UserNameIndex")
+                        .HasFilter("[NormalizedUserName] IS NOT NULL");
+
+                    b.ToTable("AspNetUsers", (string)null);
+                });
+
+            modelBuilder.Entity("WeBudgetWebAPI.Models.Entities.Budget", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("Id");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<bool>("Active")
+                        .HasColumnType("bit")
+                        .HasColumnName("Active");
+
+                    b.Property<DateTime>("BudgetDate")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("BudgetDate");
+
+                    b.Property<double>("BudgetValue")
+                        .HasColumnType("float")
+                        .HasColumnName("BudgetValue");
+
+                    b.Property<double>("BudgetValueUsed")
+                        .HasColumnType("float")
+                        .HasColumnName("BudgetValueUsed");
+
+                    b.Property<int>("CategoryId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)")
                         .HasColumnOrder(1);
 
                     b.HasKey("Id");
@@ -266,27 +307,27 @@ namespace WeBudgetWebAPI.Migrations
                     b.ToTable("Budget");
                 });
 
-            modelBuilder.Entity("WeBudgetWebAPI.Models.Category", b =>
+            modelBuilder.Entity("WeBudgetWebAPI.Models.Entities.Category", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
+                        .HasColumnType("int")
                         .HasColumnName("Id");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasColumnType("text")
+                        .HasColumnType("nvarchar(max)")
                         .HasColumnName("CategoryDescription");
 
                     b.Property<int>("IconCode")
-                        .HasColumnType("integer")
+                        .HasColumnType("int")
                         .HasColumnName("CategoryIconCode");
 
                     b.Property<string>("UserId")
                         .IsRequired()
-                        .HasColumnType("text")
+                        .HasColumnType("nvarchar(450)")
                         .HasColumnOrder(1);
 
                     b.HasKey("Id");
@@ -296,56 +337,56 @@ namespace WeBudgetWebAPI.Migrations
                     b.ToTable("Category");
                 });
 
-            modelBuilder.Entity("WeBudgetWebAPI.Models.Transaction", b =>
+            modelBuilder.Entity("WeBudgetWebAPI.Models.Entities.Transaction", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
+                        .HasColumnType("int")
                         .HasColumnName("Id");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("Address")
                         .IsRequired()
-                        .HasColumnType("text")
+                        .HasColumnType("nvarchar(max)")
                         .HasColumnName("Address");
 
                     b.Property<int>("CategoryId")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasColumnType("text")
+                        .HasColumnType("nvarchar(max)")
                         .HasColumnName("TransactionDescription");
 
                     b.Property<double>("Latitude")
-                        .HasColumnType("double precision")
+                        .HasColumnType("float")
                         .HasColumnName("Latitude");
 
                     b.Property<double>("Longitude")
-                        .HasColumnType("double precision")
+                        .HasColumnType("float")
                         .HasColumnName("Longitude");
 
                     b.Property<string>("PaymentType")
                         .IsRequired()
-                        .HasColumnType("text")
+                        .HasColumnType("nvarchar(max)")
                         .HasColumnName("PaymentType");
 
                     b.Property<double>("PaymentValue")
-                        .HasColumnType("double precision")
+                        .HasColumnType("float")
                         .HasColumnName("PaymentValue");
 
                     b.Property<DateTime>("TansactionDate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("datetime2")
                         .HasColumnName("TansactionDate");
 
                     b.Property<int>("TansactionType")
-                        .HasColumnType("integer")
+                        .HasColumnType("int")
                         .HasColumnName("TansactionType");
 
                     b.Property<string>("UserId")
                         .IsRequired()
-                        .HasColumnType("text")
+                        .HasColumnType("nvarchar(450)")
                         .HasColumnOrder(1);
 
                     b.HasKey("Id");
@@ -368,7 +409,7 @@ namespace WeBudgetWebAPI.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
+                    b.HasOne("WeBudgetWebAPI.Models.Entities.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -377,7 +418,7 @@ namespace WeBudgetWebAPI.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
+                    b.HasOne("WeBudgetWebAPI.Models.Entities.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -392,7 +433,7 @@ namespace WeBudgetWebAPI.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
+                    b.HasOne("WeBudgetWebAPI.Models.Entities.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -401,60 +442,71 @@ namespace WeBudgetWebAPI.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
+                    b.HasOne("WeBudgetWebAPI.Models.Entities.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("WeBudgetWebAPI.Models.Budget", b =>
+            modelBuilder.Entity("WeBudgetWebAPI.Models.Entities.Account", b =>
                 {
-                    b.HasOne("WeBudgetWebAPI.Models.Category", "Category")
+                    b.HasOne("WeBudgetWebAPI.Models.Entities.ApplicationUser", "ApplicationUser")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ApplicationUser");
+                });
+
+            modelBuilder.Entity("WeBudgetWebAPI.Models.Entities.Budget", b =>
+                {
+                    b.HasOne("WeBudgetWebAPI.Models.Entities.Category", "Category")
                         .WithMany()
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "IdentityUser")
+                    b.HasOne("WeBudgetWebAPI.Models.Entities.ApplicationUser", "ApplicationUser")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("ApplicationUser");
 
                     b.Navigation("Category");
-
-                    b.Navigation("IdentityUser");
                 });
 
-            modelBuilder.Entity("WeBudgetWebAPI.Models.Category", b =>
+            modelBuilder.Entity("WeBudgetWebAPI.Models.Entities.Category", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "IdentityUser")
+                    b.HasOne("WeBudgetWebAPI.Models.Entities.ApplicationUser", "ApplicationUser")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("IdentityUser");
+                    b.Navigation("ApplicationUser");
                 });
 
-            modelBuilder.Entity("WeBudgetWebAPI.Models.Transaction", b =>
+            modelBuilder.Entity("WeBudgetWebAPI.Models.Entities.Transaction", b =>
                 {
-                    b.HasOne("WeBudgetWebAPI.Models.Category", "Category")
+                    b.HasOne("WeBudgetWebAPI.Models.Entities.Category", "Category")
                         .WithMany()
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "IdentityUser")
+                    b.HasOne("WeBudgetWebAPI.Models.Entities.ApplicationUser", "ApplicationUser")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Category");
+                    b.Navigation("ApplicationUser");
 
-                    b.Navigation("IdentityUser");
+                    b.Navigation("Category");
                 });
 #pragma warning restore 612, 618
         }
