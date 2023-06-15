@@ -1,6 +1,6 @@
 using WeBudgetWebAPI.Models.Enums;
 
-namespace WeBudgetWebAPI.DTOs;
+namespace WeBudgetWebAPI.DTOs.Response;
 
 public class TransactionResponse
 {
@@ -14,4 +14,6 @@ public class TransactionResponse
     public double Longitude { get; set; }
     public string Address { get; set; }
     public int CategoryId { get; set; }
+    public string CategoryDescription { get; set; }
+    public int CategoryIconCode { get; set; }
 }
