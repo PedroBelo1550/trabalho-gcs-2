@@ -53,5 +53,5 @@ jobs:
         with:
           app-name: 'trabalho-final-gcs'
           slot-name: 'production'
-          publish-profile: ${{ secrets.AzureAppService_PublishProfile_1234 }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_2159CA7D47FB485195E2FFDBF5F3D31A }}
           package: .
