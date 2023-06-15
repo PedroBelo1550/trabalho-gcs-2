@@ -59,7 +59,7 @@ public class IdentityService:IIdentityService
             var userCurrent = await _userManager.FindByEmailAsync(usuarioLogin.Email);
             var userId = userCurrent.Id;
             var expiresIn = 3600;
-            var token = new TokenJWTBuilder()
+            var token = new TokenJwtBuilder()
                 .AddSecurityKey(JwtSecurityKey.Create("Secret_Key-12345678"))
                 .AddSubject("WeBudget")
                 .AddIssuer("Teste.Securiry.Bearer")
@@ -84,7 +84,7 @@ public class IdentityService:IIdentityService
         if (token == null)
             return Result.Fail("Problemas para gerar o token");
         //Url de recuperacao
-        var resetUrl = "token= " + token;
+        var resetUrl = "https://webudgetpucminas.netlify.app/resetsenha.html?token=" + token + "&email=" + forgotPassword.Email;
         MailRequest request = new MailRequest()
         {
             ToEmail = forgotPassword.Email,
