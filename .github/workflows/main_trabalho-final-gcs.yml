@@ -24,7 +24,10 @@ jobs:
 
       - name: Build with dotnet
         run: dotnet build --configuration Release WeBudgetWebApplication/WeBudgetWebAPI
-
+    # Execute all unit tests in the solution
+      - name: Execute unit tests
+        run: dotnet test WeBudgetWebApplication/TestWeBudgetWebAPI/TestWeBudgetWebAPI.csproj
+        
       - name: dotnet publish
         run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp WeBudgetWebApplication/WeBudgetWebAPI
 
